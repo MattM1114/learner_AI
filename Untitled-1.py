@@ -1,18 +1,16 @@
 # this is were I will be showing the ai that I will make 
 # 1st I need to import ,the important files 
 # such as the nlp library and scholarly 
-# Import NLP libraries
 import nltk
 import webbrowser
 from nltk.stem import WordNetLemmatizer
-
-# ths will lemmatize the query before searching
 nltk.download('punkt') 
 nltk.download('wordnet')
+import scholarly
+import gensim
+from gensim.summarization import summarize
 
 
-# Import library for academic search
-import scholarly  
 
 # Create lemmatizer instance
 lemmatizer = WordNetLemmatizer()  
@@ -54,6 +52,48 @@ def academic_search(query):
 
 
 
+# Function to summarize text
+def text_summarization(text):
+    try:
+        # Summarize the text
+        summary = summarize(text)
+        if summary:
+            print("Summary:")
+            print(summary)
+        else:
+            print("Unable to generate a summary for the given text.")
+    except Exception as e:
+        print("An error occurred during text summarization:", e)
+
+
+def conduct_quiz():
+    print("Let's start the quiz and generate flashcards!")
+    flashcards = []
+
+    # Ask each question and generate flashcards
+    for question, answer in quiz_questions.items():
+        # Ask the question
+        user_answer = input(question + " ")
+
+        # Add flashcard
+        flashcard = {
+            "prompt": question,
+            "answer": answer
+        }
+        flashcards.append(flashcard)
+
+        # Check user's answer
+        if user_answer.lower() == answer.lower():
+            print("Correct!")
+        else:
+            print(f"Sorry, the correct answer is {answer}.")
+
+    print("Flashcards generated successfully!")
+    return flashcards
+
+
+
+
 # Main dialog function    
 def chat():
     print("Hello, I'm ResearchBot! How can I help you with your schoolwork today?")
@@ -72,7 +112,19 @@ def chat():
         
         elif 'summary' in text:
             # Call summarization function
-            pass
+            text_to_summarize = input("Enter the text you want to summarize: ")
+            text_summarization(text_to_summarize)
+        
+        
+        elif 'quiz' in text:
+            # Start the quiz and generate flashcards
+            flashcards = conduct_quiz()
+            print("Generated Flashcards:")
+            for flashcard in flashcards:
+                print("Prompt:", flashcard["prompt"])
+                print("Answer:", flashcard["answer"])
+                print()
+        
         
         else:
             print("ResearchBot: I'm sorry, I don't understand. Please ask me a question about research, assignments, or studying!")
