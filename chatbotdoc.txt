@@ -1,0 +1,62 @@
+ResearchBot Documentation
+Overview
+ResearchBot is an interactive chatbot designed to assist users with academic research, explanations of complex topics, and studying through quizzes and flashcards. Utilizing the Python programming language, this chatbot leverages natural language processing and web scraping to fetch relevant academic information from Google Scholar.
+
+Features
+Academic Search: Directs the user to Google Scholar search results based on their query.
+Explanation Provision: Offers a brief explanation of a queried topic by summarizing the abstract of a top search result from Google Scholar.
+Quiz and Flashcards Generation: Generates quiz questions and flashcards for studying, based on user-specified topics.
+Dependencies
+Python 3.12
+NLTK (Natural Language Toolkit)
+Requests
+BeautifulSoup4
+webbrowser (standard library)
+Setup
+Before running ResearchBot, ensure all dependencies are installed. Use the following commands to install NLTK, Requests, and BeautifulSoup4:
+
+bash
+Copy code
+pip install nltk
+pip install requests
+pip install beautifulsoup4
+Save to grepper
+NLTK resources punkt and wordnet must also be downloaded:
+
+python
+Copy code
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+Save to grepper
+Usage
+To start ResearchBot, run the Python script containing the chatbot's code. Interact with the chatbot through the command line interface.
+
+Functionality
+Academic Search: Type search <your_topic> to open a browser window with Google Scholar search results for your topic.
+Explanation Provision: Type explain <your_topic> to receive a brief explanation of the top Google Scholar result for your topic.
+Quiz and Flashcards: Type quiz or flashcards and follow the prompts to generate a quiz or flashcards for a specified topic.
+Examples
+Searching: You: search quantum physics
+Explanation: You: explain machine learning
+Quiz/Flashcards: You: quiz
+Then, enter the topic when prompted.
+Extending the Bot
+To extend ResearchBot's functionality, consider implementing the following:
+
+Dynamic quiz and flashcard generation based on the content of academic papers.
+Integration with a database to store and retrieve user-generated quizzes and flashcards.
+Additional NLP features to improve the bot's understanding and response capabilities.
+Known Issues
+The bot's capabilities are limited by the content and structure of Google Scholar search results.
+Web scraping reliability may vary as web page structures change over time.
+Contribution
+Contributions to ResearchBot are welcome. To contribute, please fork the repository, make your changes, and submit a pull request.
+
+This documentation provides a starting point for users and developers interested in using or contributing to ResearchBot. Adjustments may be necessary as the bot evolves or new features are added.
+
+
+
+
+
+

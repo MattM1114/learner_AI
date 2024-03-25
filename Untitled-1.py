@@ -71,37 +71,56 @@ explanations = {
 
 # Function to provide explanations
 def provide_explanation(query):
-    query = query.lower()
-    for keyword, explanation in explanations.items():
-        if keyword in query:
-            return explanation
-    return "I'm sorry, I don't have an explanation for that."
+    try:
+        # Perform search on Google Scholar
+        url = f"https://scholar.google.com/scholar?q={query}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            results = soup.find_all('div', class_='gs_r gs_or gs_scl')
+            if results:
+                # Get the title and abstract of the top result
+                top_result = results[0]
+                title = top_result.find('h3', class_='gs_rt').text.strip()
+                abstract = top_result.find('div', class_='gs_rs').text.strip()
+                explanation = f"Title: {title}\nAbstract: {abstract}"
+                return explanation
+            else:
+                return "No academic papers found for this query."
+        else:
+            return "Failed to retrieve search results."
+    except Exception as e:
+        return f"An error occurred: {e}"
 
 
-def conduct_quiz():
-    print("Let's start the quiz and generate flashcards!")
+def conduct_quiz_and_flashcards(topic):
+    print(f"Generating quiz and flashcards for the topic: {topic}")
+    
+    # Example questions and answers (Replace this with dynamic generation based on the topic)
+    quiz_questions = {
+        "What is the primary function of the OSI model's Application Layer?": "Facilitate application services for file transfers, email, and other network software services.",
+        # Add more questions based on the topic
+    }
+
     flashcards = []
-
-    # Ask each question and generate flashcards
+    
+    # Conduct the quiz
     for question, answer in quiz_questions.items():
-        # Ask the question
         user_answer = input(question + " ")
-
-        # Add flashcard
-        flashcard = {
-            "prompt": question,
-            "answer": answer
-        }
-        flashcards.append(flashcard)
-
-        # Check user's answer
         if user_answer.lower() == answer.lower():
             print("Correct!")
         else:
-            print(f"Sorry, the correct answer is {answer}.")
-
-    print("Flashcards generated successfully!")
-    return flashcards
+            print(f"Incorrect. The correct answer is: {answer}")
+        
+        # Generate flashcard
+        flashcards.append({"question": question, "answer": answer})
+    
+    # Optionally, display or do something with the generated flashcards
+    print("\nGenerated Flashcards:")
+    for flashcard in flashcards:
+        print(f"Q: {flashcard['question']}")
+        print(f"A: {flashcard['answer']}")
+        print("---")
 
 
 
@@ -129,14 +148,13 @@ def chat():
             print("ResearchBot:", explanation)
         
         
-        elif 'quiz' in text:
-            # Start the quiz and generate flashcards
-            flashcards = conduct_quiz()
-            print("Generated Flashcards:")
-            for flashcard in flashcards:
-                print("Prompt:", flashcard["prompt"])
-                print("Answer:", flashcard["answer"])
-                print()
+        elif 'quiz' in text or 'flashcards' in text:
+            topic = input("What topic would you like to quiz yourself on or create flashcards for? ").strip()
+            conduct_quiz_and_flashcards(topic)
+        
+        elif 'quit' in text or 'stop' in text or 'exit' in text:
+            print("Thanks for chatting with me! Have a great day.")
+            break
         
         
         else:
