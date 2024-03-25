@@ -1,15 +1,17 @@
 # this is were I will be showing the ai that I will make 
 # 1st I need to import ,the important files 
-# such as the nlp library and scholarly 
+# such as the nlp library and scholarly
+# Import the necessary libraries 
 import nltk
 import webbrowser
 from nltk.stem import WordNetLemmatizer
+import scholarly
+import requests
+from bs4 import BeautifulSoup
+
+# Download nltk resources
 nltk.download('punkt') 
 nltk.download('wordnet')
-import scholarly
-import gensim
-from gensim.summarization import summarize
-
 
 
 # Create lemmatizer instance
@@ -25,45 +27,55 @@ def preprocess(text):
     return processed_text
 
 
-
 # Function for academic search
 def academic_search(query):
     try:
-        results = scholarly.search_pubs(query)
-        if results:
-            # Iterate over results
-            for i, result in enumerate(results):
-                # Open browser to top result
-                if i == 0:
-                    webbrowser.open(result.bib['url'])
-                    print("Academic paper opened in your default browser.")
-                
-                # Print out some key info for each result
-                print("Result", i+1)
-                print("Title:", result.bib['title'])
-                print("Author:", result.bib['author'])
-                print("Year:", result.bib['year'])
-                print("URL:", result.bib['url'])
-                print()
+        # Perform search on Google Scholar
+        url = f"https://scholar.google.com/scholar?q={query}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            results = soup.find_all('div', class_='gs_r gs_or gs_scl')
+            if results:
+                # Open the search results page in the default web browser
+                webbrowser.open(url)
+                print("Search results opened in your default browser.")
+                # Print out some key info from each result
+                print(f"Relevant results for '{query}':")
+                for result in results:
+                    title = result.find('h3', class_='gs_rt').text.strip()
+                    authors = result.find('div', class_='gs_a').text.strip()
+                    year = result.find('div', class_='gs_a').text.split('-')[-1].strip()
+                    link = result.find('a')['href']
+                    print("Title:", title)
+                    print("Authors:", authors)
+                    print("Year:", year)
+                    print("Link:", link)
+                    print()
+            else:
+                print("No academic papers found for this query.")
         else:
-            print("No academic papers found for this query.")
+            print("Failed to retrieve search results.")
     except Exception as e:
         print("An error occurred:", e)
 
 
 
-# Function to summarize text
-def text_summarization(text):
-    try:
-        # Summarize the text
-        summary = summarize(text)
-        if summary:
-            print("Summary:")
-            print(summary)
-        else:
-            print("Unable to generate a summary for the given text.")
-    except Exception as e:
-        print("An error occurred during text summarization:", e)
+# Define explanations for keywords
+explanations = {
+    "nlp": "NLP (Natural Language Processing) is a field of artificial intelligence focused on the interaction between computers and humans through natural language.",
+    "scholarly": "Scholarly is a Python library for scholarly research. It allows you to search for academic papers and retrieve their metadata.",
+    "lemmatizer": "A lemmatizer is a tool used in natural language processing to reduce words to their base or root form, called a lemma.",
+    # Add more explanations as needed
+}
+
+# Function to provide explanations
+def provide_explanation(query):
+    query = query.lower()
+    for keyword, explanation in explanations.items():
+        if keyword in query:
+            return explanation
+    return "I'm sorry, I don't have an explanation for that."
 
 
 def conduct_quiz():
@@ -110,10 +122,11 @@ def chat():
             query = text.split('search')[-1]
             academic_search(query)
         
-        elif 'summary' in text:
-            # Call summarization function
-            text_to_summarize = input("Enter the text you want to summarize: ")
-            text_summarization(text_to_summarize)
+        elif 'explain' in text:
+            # Provide explanation
+            query = text.split('explain')[-1]
+            explanation = provide_explanation(query)
+            print("ResearchBot:", explanation)
         
         
         elif 'quiz' in text:
