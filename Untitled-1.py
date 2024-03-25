@@ -61,13 +61,7 @@ def academic_search(query):
 
 
 
-# Define explanations for keywords
-explanations = {
-    "nlp": "NLP (Natural Language Processing) is a field of artificial intelligence focused on the interaction between computers and humans through natural language.",
-    "scholarly": "Scholarly is a Python library for scholarly research. It allows you to search for academic papers and retrieve their metadata.",
-    "lemmatizer": "A lemmatizer is a tool used in natural language processing to reduce words to their base or root form, called a lemma.",
-    # Add more explanations as needed
-}
+
 
 # Function to provide explanations
 def provide_explanation(query):
