@@ -63,7 +63,7 @@ def academic_search(query):
 
 
 
-# Function to provide explanations
+# Function to provide explanations or summaries
 def provide_explanation(query):
     try:
         # Perform search on Google Scholar
@@ -140,6 +140,13 @@ def chat():
             query = text.split('explain')[-1]
             explanation = provide_explanation(query)
             print("ResearchBot:", explanation)
+        
+        elif 'summary' in text:
+            # Extract the topic for summarization
+            topic = text.split('summary')[-1].strip()
+            # Call provide_explanation to get a summary
+            summary = provide_explanation(topic)
+            print("ResearchBot:", summary)
         
         
         elif 'quiz' in text or 'flashcards' in text:
