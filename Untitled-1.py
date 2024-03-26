@@ -8,6 +8,8 @@ from nltk.stem import WordNetLemmatizer
 import scholarly
 import requests
 from bs4 import BeautifulSoup
+from nltk.tokenize import sent_tokenize
+
 
 # Download nltk resources
 nltk.download('punkt') 
@@ -59,11 +61,6 @@ def academic_search(query):
     except Exception as e:
         print("An error occurred:", e)
 
-
-
-
-
-# Function to provide explanations or summaries
 def provide_explanation(query):
     try:
         # Perform search on Google Scholar
@@ -73,11 +70,20 @@ def provide_explanation(query):
             soup = BeautifulSoup(response.content, 'html.parser')
             results = soup.find_all('div', class_='gs_r gs_or gs_scl')
             if results:
-                # Get the title and abstract of the top result
+                # Get the top result
                 top_result = results[0]
+                
+                # Extract details
                 title = top_result.find('h3', class_='gs_rt').text.strip()
+                authors = top_result.find('div', class_='gs_a').text.strip()
+                year = top_result.find('div', class_='gs_a').text.split('-')[-1].strip()
+                link = top_result.find('a')['href']
+                
+                # Extract abstract
                 abstract = top_result.find('div', class_='gs_rs').text.strip()
-                explanation = f"Title: {title}\nAbstract: {abstract}"
+                
+                # Construct the explanation
+                explanation = f"Title: {title}\nAuthors: {authors}\nYear: {year}\nAbstract: {abstract}\nLink: {link}"
                 return explanation
             else:
                 return "No academic papers found for this query."
@@ -85,6 +91,52 @@ def provide_explanation(query):
             return "Failed to retrieve search results."
     except Exception as e:
         return f"An error occurred: {e}"
+
+
+def extract_abstract(url):
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            abstract_tag = soup.find('div', class_='gs_rs')
+            if abstract_tag:
+                return abstract_tag.text.strip()
+            else:
+                return "No abstract found."
+        else:
+            return "Failed to retrieve paper content."
+    except Exception as e:
+        return f"An error occurred: {e}"
+
+def summarize_text(text):
+    # Tokenize the text into sentences
+    sentences = sent_tokenize(text)
+    # Extract the first few sentences as the summary
+    summary = ' '.join(sentences[:2])  # Adjust the number of sentences as needed
+    return summary
+
+def summarize_google_scholar(query):
+    try:
+        # Perform search on Google Scholar
+        url = f"https://scholar.google.com/scholar?q={query}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            results = soup.find_all('div', class_='gs_r gs_or gs_scl')
+            if results:
+                print(f"Summaries for search results on '{query}':")
+                for result in results:
+                    title = result.find('h3', class_='gs_rt').text.strip()
+                    abstract = result.find('div', class_='gs_rs').text.strip()
+                    print(f"Title: {title}")
+                    print(f"Abstract: {summarize_text(abstract)}")
+                    print()
+            else:
+                print("No academic papers found for this query.")
+        else:
+            print("Failed to retrieve search results.")
+    except Exception as e:
+        print("An error occurred:", e)
 
 
 def conduct_quiz_and_flashcards(topic):
@@ -142,11 +194,9 @@ def chat():
             print("ResearchBot:", explanation)
         
         elif 'summary' in text:
-            # Extract the topic for summarization
-            topic = text.split('summary')[-1].strip()
-            # Call provide_explanation to get a summary
-            summary = provide_explanation(topic)
-            print("ResearchBot:", summary)
+                # Summarize Google Scholar search results
+                query = input("What topic would you like to summarize? ").strip()
+                summarize_google_scholar(query)
         
         
         elif 'quiz' in text or 'flashcards' in text:
