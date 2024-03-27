@@ -9,6 +9,7 @@ import scholarly
 import requests
 from bs4 import BeautifulSoup
 from nltk.tokenize import sent_tokenize
+from datetime import datetime
 
 
 # Download nltk resources
@@ -31,37 +32,38 @@ def preprocess(text):
 
 # Function for academic search
 def academic_search(query):
+    current_year = datetime.now().year
+    search_years_range = f"{current_year-4}-{current_year}"
+    
     try:
         # Perform search on Google Scholar
-        url = f"https://scholar.google.com/scholar?q={query}"
+        url = f"https://scholar.google.com/scholar?as_ylo={current_year-4}&q={query}"
         response = requests.get(url)
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, 'html.parser')
-            results = soup.find_all('div', class_='gs_r gs_or gs_scl')
-            if results:
-                # Open the search results page in the default web browser
-                webbrowser.open(url)
-                print("Search results opened in your default browser.")
-                # Print out some key info from each result
-                print(f"Relevant results for '{query}':")
-                for result in results:
-                    title = result.find('h3', class_='gs_rt').text.strip()
-                    authors = result.find('div', class_='gs_a').text.strip()
-                    year = result.find('div', class_='gs_a').text.split('-')[-1].strip()
-                    link = result.find('a')['href']
-                    print("Title:", title)
-                    print("Authors:", authors)
-                    print("Year:", year)
-                    print("Link:", link)
-                    print()
-            else:
-                print("No academic papers found for this query.")
+            results = soup.find_all('div', class_='gs_ri')[:10]  # Get top 10 results   
+            print(f"Top 10 relevant results for '{query}' from {search_years_range}:")
+            for index, result in enumerate(results, start=1):
+                title_element = result.find('h3', class_='gs_rt')
+                title = title_element.text.strip() if title_element else "No title found"
+                link_element = title_element.find('a') if title_element else None
+                link = link_element['href'] if link_element else "No link available"
+            # Extract authors
+                abstract_element = result.find('div', class_='gs_rs')
+                abstract = abstract_element.text.strip() if abstract_element else "No abstract available"
+                print(f"\nArticle {index}:")
+                print(f"Title: {title}")
+                print(f"Abstract: {abstract}")
+                print(f"Url: {link}")
         else:
             print("Failed to retrieve search results.")
     except Exception as e:
-        print("An error occurred:", e)
+        print(f"An error occurred: {e}")
 
-def provide_explanation(query):
+import requests
+from bs4 import BeautifulSoup
+
+def explain(query):
     try:
         # Perform search on Google Scholar
         url = f"https://scholar.google.com/scholar?q={query}"
@@ -91,6 +93,7 @@ def provide_explanation(query):
             return "Failed to retrieve search results."
     except Exception as e:
         return f"An error occurred: {e}"
+
 
 
 def extract_abstract(url):
@@ -190,7 +193,7 @@ def chat():
         elif 'explain' in text:
             # Provide explanation
             query = text.split('explain')[-1]
-            explanation = provide_explanation(query)
+            explanation = explanation(query)
             print("ResearchBot:", explanation)
         
         elif 'summary' in text:
