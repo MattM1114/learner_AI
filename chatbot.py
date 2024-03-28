@@ -193,7 +193,7 @@ def chat():
         elif 'explain' in text:
             # Provide explanation
             query = text.split('explain')[-1]
-            explanation = explanation(query)
+            explanation = explain(query)
             print("ResearchBot:", explanation)
         
         elif 'summary' in text:
