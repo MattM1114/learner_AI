@@ -1,0 +1,79 @@
+AI Research Assistant Documentation
+
+Description:
+This AI Research Assistant is designed to help users with various tasks related to academic research, studying, and assignments. It utilizes natural language processing (NLP) techniques, web scraping, and mathematical computation to provide assistance in searching for academic papers, explaining concepts, summarizing search results, conducting quizzes, and solving mathematical expressions.
+
+Functions:
+
+1. preprocess(text)
+    - Description: Preprocesses the input text by tokenizing words and lemmatizing them.
+    - Parameters:
+        - text (str): Input text to preprocess.
+    - Returns:
+        - processed_text (str): Preprocessed text.
+
+2. academic_search(query)
+    - Description: Performs a search on Google Scholar for academic papers related to the given query.
+    - Parameters:
+        - query (str): Search query.
+    - Prints:
+        - Top 10 relevant results including title, abstract, and URL.
+
+3. explain(query)
+    - Description: Provides an explanation for a given academic topic by extracting details from Google Scholar.
+    - Parameters:
+        - query (str): Query for the academic topic.
+    - Returns:
+        - explanation (str): Explanation containing title, authors, year, abstract, and link.
+
+4. extract_abstract(url)
+    - Description: Extracts the abstract from a given URL (Google Scholar paper page).
+    - Parameters:
+        - url (str): URL of the paper page.
+    - Returns:
+        - abstract (str): Extracted abstract.
+
+5. summarize_text(text)
+    - Description: Summarizes the given text by extracting the first few sentences.
+    - Parameters:
+        - text (str): Text to summarize.
+    - Returns:
+        - summary (str): Summarized text.
+
+6. summarize_google_scholar(query)
+    - Description: Summarizes the search results from Google Scholar for a given query.
+    - Parameters:
+        - query (str): Query for summarization.
+    - Prints:
+        - Summaries for the search results including title and summarized abstract.
+
+7. conduct_quiz_and_flashcards(topic)
+    - Description: Generates a quiz and flashcards for the given topic.
+    - Parameters:
+        - topic (str): Topic for quiz and flashcards generation.
+    - Prints:
+        - Quiz questions and answers, and generates flashcards.
+
+8. calculate(expression)
+    - Description: Calculates the result of a mathematical expression.
+    - Parameters:
+        - expression (str): Mathematical expression to evaluate.
+    - Returns:
+        - result (float): Result of the mathematical expression.
+
+9. chat()
+    - Description: Main dialog function for interacting with the AI Research Assistant.
+    - Performs various actions based on user input, including searching, explaining, summarizing, conducting quizzes, solving math, and quitting.
+
+Usage:
+1. Install the required libraries by running the following commands:
+    - !pip install nltk
+    - !pip install scholarly
+    - !pip install sympy
+2. Import the necessary libraries: nltk, webbrowser, WordNetLemmatizer from nltk.stem, scholarly, requests, BeautifulSoup from bs4, sent_tokenize from nltk.tokenize, datetime, math, and Symbol from sympy.
+3. Download NLTK resources using nltk.download('punkt') and nltk.download('wordnet').
+4. Create a lemmatizer instance using WordNetLemmatizer.
+5. Call the chat() function to start interacting with the AI Research Assistant.
+
+Example Usage:
+chat()
