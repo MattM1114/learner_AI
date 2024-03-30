@@ -10,6 +10,9 @@ import requests
 from bs4 import BeautifulSoup
 from nltk.tokenize import sent_tokenize
 from datetime import datetime
+import math
+import sympy as sp
+from sympy import Symbol
 
 
 # Download nltk resources
@@ -173,10 +176,22 @@ def conduct_quiz_and_flashcards(topic):
 
 
 
+def calculate(expression):
+    """Takes a mathematical expression as a string, converts it to a symbolic 
+    expression using SymPy, and evaluates it."""
+    try:
+        x = Symbol('x')  # Define a symbolic variable (can be changed)
+        expr = sp.sympify(expression)  # Convert string to symbolic expression
+        result = expr.evalf()  # Evaluate the expression numerically
+        return result
+    except:
+        return "Invalid expression."
+
+
 
 # Main dialog function    
 def chat():
-    print("Hello, I'm ResearchBot! How can I help you with your schoolwork today?")
+    print("Hello, I'm learner! How can I help you with your schoolwork today?")
     
     while True:
         text = input("You: ")
@@ -210,6 +225,10 @@ def chat():
             print("Thanks for chatting with me! Have a great day.")
             break
         
+        elif 'math' in text:
+            expression = text.split('math')[-1].strip()
+            result = calculate(expression)
+            print("ResearchBot: Result =", result)
         
         else:
             print("ResearchBot: I'm sorry, I don't understand. Please ask me a question about research, assignments, or studying!")
