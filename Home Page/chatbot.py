@@ -228,7 +228,7 @@ def chat():
         elif 'math' in text:
             expression = text.split('math')[-1].strip()
             result = calculate(expression)
-            print("ResearchBot: Result =", result)
+            print(f"ResearchBot: Result = {round(result,1)}")
         
         else:
             print("ResearchBot: I'm sorry, I don't understand. Please ask me a question about research, assignments, or studying!")
