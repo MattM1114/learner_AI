@@ -1,0 +1,27 @@
+body{
+    margin: 0;
+	padding: 0;
+}
+
+  .bottom{
+    position: absolute;
+	top: 60%;
+	left: 30%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+.btn{
+  background: none;
+  border: 2px solid #fff;
+  font-family: "montserrat", sans-serif;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  min-width: 200px;
+  margin: 8px;
+  cursor: pointer;
+  transition: color 0.4s linear;
+  position: relative;
+  }
+  .btn:hover{
+     color: #fff;
+}
