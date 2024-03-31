@@ -235,4 +235,8 @@ def chat():
 
 
 # Start chatbot      
-chat()
+if __name__ == "__main__":
+    while True:
+        user_input = input("You: ")
+        response = chat(user_input)
+        print(response)
