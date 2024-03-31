@@ -1,23 +1,45 @@
 <html>
 <head>
-<link rel="stylesheet" href="Navigation.css">
     <title>AI Chatbot</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-        *{
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-			font-family: "Poppins", sans-serif;
-		}
-		body {
+        body {
             background-image: url('background.jpg');
             background-size: cover;
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background-color: black; 
+            background-color: darkcyan; 
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            color: #ffffff;
+        }
+        .navbar {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar li {
+            display: inline;
+            margin-left: 10px;
+        }
+
+        .navbar li a {
+            text-decoration: none;
+            color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: blue;
+        }
+
+        .navbar li a:hover {
+            background-color: rgba(0, 0, 0, 0.7);
         }
 
         .chat-container {
@@ -49,57 +71,32 @@
             margin-top: 10px; /* Add some space between textarea and button */
         }
 
-		.header{
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			padding: 20px 100px;
-			background: transparent;
-			display: flex;
-			z-index: 100;
-		}
-		
-		.navbar a{
-			position: relative;
-			font-size: 18px;
-			color: #fff;
-			font-weight: 500;
-			text-decoration: none;
-			margin-left: 40px
-		}	
-		
-		.navbar a::before{
-			content:'';
-			position: absolute;
-			top: 100%;
-			left: 0;
-			width: 0;
-			height: 2px;
-			background: #fff;
-			transition: .3s;
-		}	
-		
-		.navbar a:hover::before{
-			width: 100%;
-		}
+        .header h1 {
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .header h1.title {
+            margin: 0;
+        }
     </style>
 </head>
 
-<img src="Learner AI.jpg" alt="Learner AI logo" width="10%" height="15%"/>
 <body>
-	<header class="header">
-		
-			<nav class="navbar">
-				<a href="Home.html">Home</a>
-				<a href="login.html">Login</a>
-				<a href="work explanation.html">Work explanation</a>
-				<a href="about.html">About</a>
-				<a href="contact me.html">Contact me</a>
-			</nav>
-	</header>
-</body>
-
+<header class="header">
+    <h1 class="title">Learner Interface</h1>
+    <nav>
+        <ul class="navbar">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="flashcards.html">Flashcards</a></li>
+            <li><a href="work explanation.html">Work explanation</a></li>
+            <li><a href="AboutUs with LOGO.html">About</a></li>
+            <li><a href="Contact us.html">Contact me</a></li>
+            <li><a href="a.html">Chatbot</a></li>
+        </ul>
+    </nav>
+</header>
 <div class="chat-container">
     <textarea id="user-query" rows="4" cols="50"></textarea><br /><br />
     <button id="send-query-btn" onclick="sendQuery()">Send Query</button>
@@ -120,6 +117,7 @@
             .then((response) => response.json())
             .then((data) => {
                 document.getElementById("response").innerText = data.response;
+                console.log(data);
             })
             .catch((error) => {
                 console.error("Error:", error);
