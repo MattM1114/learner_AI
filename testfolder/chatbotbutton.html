@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResearchBot</title>
+</head>
+<body>
+    <h1>Welcome to ResearchBot</h1>
+    <p>Click the button below to start chatting:</p>
+    <button id="startChatBtn">Start Chat</button>
+
+    <script>
+        document.getElementById('startChatBtn').addEventListener('click', function() {
+            startChat();
+        });
+
+        function startChat() {
+            fetch('/start_chat')
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Chat started');
+                    } else {
+                        console.error('Failed to start chat');
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
